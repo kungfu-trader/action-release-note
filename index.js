@@ -6,7 +6,6 @@ const main = async function () {
   const context = github.context;
   const argv = {
     token: core.getInput('token'),
-    mondayApi: core.getInput('monday_api_key'),
     apiKey: core.getInput("apiKey"),
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,

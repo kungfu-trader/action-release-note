@@ -5,7 +5,6 @@ const argv = require('yargs/yargs')(process.argv.slice(2))
   .option('owner', { description: 'owner', type: 'string' })
   .option('repo', { description: 'repo', type: 'string' })
   .option('apiKey', { description: 'apiKey', type: 'string' })
-  .option('mondayApi', { description: 'mondayApi', type: 'string' })
   .option('pullRequestNumber', { description: 'pullRequestNumber', type: 'number' })
   .option('pullRequestTitle', { description: 'pullRequestTitle', type: 'string' })
   .help().argv;

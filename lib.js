@@ -3,7 +3,6 @@ const upload = require("./upload.js");
 
 const getReleaseNote = async function ({
   token,
-  mondayApi,
   apiKey,
   owner,
   repo,
@@ -11,7 +10,6 @@ const getReleaseNote = async function ({
 }) {
   await upload.createRecords({
     token,
-    mondayApi,
     owner,
     repo,
     pullRequestNumber,
