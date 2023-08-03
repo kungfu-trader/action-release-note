@@ -1,0 +1,13 @@
+name: "Release Note"
+author: "Kungfu Trader"
+description: "Output Release Note When Merged"
+inputs:
+  token:
+    description: "secrets.GITHUB_TOKEN"
+    required: true
+  monday_api_key:
+    description: "secrets.MONDAY_API_KEY"
+    required: true
+runs:
+  using: "node16"
+  main: "dist/index.js"

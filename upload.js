@@ -1,0 +1,194 @@
+const { Octokit } = require("@octokit/rest");
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+
+let octokit;
+const pullCollect = new Map();
+
+exports.createRecords = async function (argv) {
+  octokit = new Octokit({
+    auth: argv.token,
+  });
+  await getPrIssues(argv);
+};
+
+const getPkgNameMap = () => {
+  const cwd = process.cwd();
+  const hasLerna = fs.existsSync(path.join(cwd, "lerna.json"));
+  const config = getPkgConfig(cwd, hasLerna ? "lerna.json" : "package.json");
+  if (hasLerna) {
+    const items = config.packages
+      .map((x) =>
+        glob
+          .sync(`${x}/package.json`)
+          .map((link) => getPkgConfig(cwd, link).name)
+      )
+      .flat();
+    return items;
+  }
+  return [config.name];
+};
+
+const getPkgConfig = (cwd, link) => {
+  return JSON.parse(fs.readFileSync(path.join(cwd, link)));
+};
+
+const getPrIssues = async (argv) => {
+  const current = await getPr(argv, argv.pullRequestNumber);
+  if (!current) {
+    return;
+  }
+  const baseRef = current.base.ref;
+  const headRef = current.head.ref;
+  createAirtableRecord.updateArgs({
+    ...argv,
+    pullRequestTitle: current.title,
+    pkgName: getPkgNameMap(),
+  });
+  if (baseRef.startsWith("alpha/")) {
+    await findIssues(argv, argv.pullRequestNumber);
+    await traversePr(argv, argv.pullRequestNumber - 1, baseRef, headRef);
+  }
+  if (baseRef.startsWith("release/")) {
+    await findIssues(argv, argv.pullRequestNumber);
+  }
+  await createAirtableRecord.submit();
+};
+
+const traversePr = async (
+  argv,
+  pullRequestNumber,
+  baseRef,
+  headRef,
+  count = 0
+) => {
+  if (pullRequestNumber <= 0 || count > 20) {
+    return;
+  }
+  const pull = await getPr(argv, pullRequestNumber);
+  if (pull?.base?.ref === headRef) {
+    await findIssues(argv, pullRequestNumber);
+  }
+  if ([headRef, baseRef].includes(pull?.head?.ref)) {
+    return;
+  }
+  traversePr(argv, pullRequestNumber - 1, baseRef, headRef, count + 1);
+};
+
+const getPr = async (argv, pullRequestNumber) => {
+  const memo = pullCollect.get(pullRequestNumber);
+  if (memo !== undefined) {
+    return memo;
+  }
+  const pull = await octokit
+    .request(
+      `GET /repos/kungfu-trader/${argv.repo}/pulls/${pullRequestNumber}`,
+      {
+        owner: "kungfu-trader",
+        repo: argv.repo,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    )
+    .catch(() => null);
+
+  const result =
+    pull?.data?.state === "closed" && pull.data.merged_at ? pull.data : null;
+  pullCollect.size >= 500 && pullCollect.clear();
+  pullCollect.set(pullRequestNumber, result);
+  return result;
+};
+
+const findIssues = async (argv, pullRequestNumber) => {
+  const iss = await octokit.graphql(`
+    query{
+      repository(name: "${argv.repo}", owner: "${argv.owner}") {
+        pullRequest(number: ${pullRequestNumber}) {
+          title
+          closingIssuesReferences (first: 100) {
+            edges {
+              node {
+                number
+                body
+                title,
+                url
+              }
+            }
+          }
+        }
+      }
+    } 
+  `);
+  const issues = iss?.repository?.pullRequest?.closingIssuesReferences?.edges;
+  createAirtableRecord.collect(issues);
+};
+
+class CreateAirtableRecord {
+  constructor(argv) {
+    this.records = [];
+    this.argv = argv || {};
+    this.numbers = new Set();
+  }
+  updateArgs(argv) {
+    this.argv = argv;
+  }
+  collect(lists) {
+    lists.forEach((v) => {
+      if (!this.numbers.has(v.node.number)) {
+        this.records.push({
+          fields: {
+            ...v.node,
+            repo: this.argv.repo,
+            owner: this.argv.owner,
+            pullRequestTitle: this.argv.pullRequestTitle,
+            version: this.argv.pullRequestTitle.split(" v")?.[1],
+            pkgName: this.argv.pkgName,
+          },
+        });
+        this.numbers.add(v.node.number);
+      }
+    });
+  }
+  submit() {
+    if (this.records.length === 0) {
+      return;
+    }
+    const airtableToken =
+      "patUbMkOMuIBBOjHb.7fcf13ddb2fce4a54b3953e5a6dd3248b5b67c445754928ae5abdc42927d0d9c";
+    const baseId = "appAdi5zFFEsCzmEM";
+    const tableId = "tblJabUQUuS6ywW5Z";
+    return axios
+      .post(
+        `https://api.airtable.com/v0/${baseId}/${tableId}`,
+        {
+          records: this.records,
+          typecast: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${airtableToken}`,
+          },
+        }
+      )
+      .then(() => {
+        console.log(
+          `submit completed length:${this.records.length} prnumber:${this.argv.pullRequestNumber}`
+        );
+      })
+      .catch((e) => {
+        console.error(
+          `submit failed ${e.message} prnumber:${this.argv.pullRequestNumber}`
+        );
+        console.error(e.stack);
+      })
+      .finally(() => {
+        this.records.length = [];
+        this.numbers.clear();
+      });
+  }
+}
+
+const createAirtableRecord = new CreateAirtableRecord();
