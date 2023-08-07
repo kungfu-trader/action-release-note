@@ -5,6 +5,8 @@ const path = require("path");
 
 let octokit;
 const pullCollect = new Map();
+const BASE_ID = "appAdi5zFFEsCzmEM";
+const TABLE_ID = "tblJabUQUuS6ywW5Z";
 
 exports.createRecords = async function (argv) {
   octokit = new Octokit({
@@ -63,7 +65,7 @@ const traversePr = async (
   headRef,
   count = 0
 ) => {
-  if (pullRequestNumber <= 0 || count > 20) {
+  if (pullRequestNumber <= 0 || count > 500) {
     return;
   }
   const pull = await getPr(argv, pullRequestNumber);
@@ -96,7 +98,7 @@ const getPr = async (argv, pullRequestNumber) => {
 
   const result =
     pull?.data?.state === "closed" && pull.data.merged_at ? pull.data : null;
-  pullCollect.size >= 500 && pullCollect.clear();
+  pullCollect.size >= 1000 && pullCollect.clear();
   pullCollect.set(pullRequestNumber, result);
   return result;
 };
@@ -155,13 +157,9 @@ class CreateAirtableRecord {
     if (this.records.length === 0) {
       return;
     }
-    const airtableToken =
-      "patUbMkOMuIBBOjHb.7fcf13ddb2fce4a54b3953e5a6dd3248b5b67c445754928ae5abdc42927d0d9c";
-    const baseId = "appAdi5zFFEsCzmEM";
-    const tableId = "tblJabUQUuS6ywW5Z";
     return axios
       .post(
-        `https://api.airtable.com/v0/${baseId}/${tableId}`,
+        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,
         {
           records: this.records,
           typecast: true,
@@ -169,7 +167,7 @@ class CreateAirtableRecord {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${airtableToken}`,
+            Authorization: `Bearer ${this.argv.apiKey}`,
           },
         }
       )
