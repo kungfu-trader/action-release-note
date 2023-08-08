@@ -11,8 +11,9 @@ exports.createNote = async function (argv) {
   const octokit = new Octokit({
     auth: argv.token,
   });
-  const lastVersion = getLastVersion(argv.pullRequestTitle.split(" v")?.[1]);
-  const rootNote = await printRootNote(argv, lastVersion);
+  const currentVersion = argv.pullRequestTitle.split(" v")?.[1];
+  const lastVersion = getLastVersion(currentVersion);
+  const rootNote = await printRootNote(argv, currentVersion);
   const depNote = await printDepNote(argv, octokit, lastVersion);
   printMd(argv, rootNote, depNote);
 };
@@ -33,7 +34,14 @@ const printMd = (argv, rootNote, depNote) => {
       acc += "\n";
       return acc;
     }, `# ${argv.repo}\n\n`);
-  fs.writeFileSync(path.join(process.cwd(), "release.md"), str);
+
+  if (!fs.existsSync(path.join(process.cwd(), "notes"))) {
+    fs.mkdirSync(path.join(process.cwd(), "notes"));
+  }
+  fs.writeFileSync(
+    path.join(process.cwd(), "notes/release.md"),
+    str.slice(0, -1)
+  );
 };
 
 const printRootNote = async (argv, version) => {
@@ -48,6 +56,9 @@ const printDepNote = async (argv, octokit, version) => {
   const alters = await getYarnALterList(argv, octokit, version);
   const notes = [];
   const repoSet = new Set();
+  if (!alters) {
+    return [];
+  }
   for await (const item of alters.diff) {
     if (!repoSet.has(item.pkgName)) {
       const result = await diffVersion(
@@ -270,7 +281,10 @@ const groupByRecords = (repo, records, description = "") => {
     }
     return acc;
   }, []);
-  if (!result?.[result.length - 1].version.includes("alpha.")) {
+  if (
+    result.length > 1 &&
+    !result?.[result.length - 1]?.version?.includes("alpha.")
+  ) {
     result.unshift(result.pop());
   }
   return result;

@@ -43,6 +43,9 @@ const getPrIssues = async (argv) => {
   }
   const baseRef = current.base.ref;
   const headRef = current.head.ref;
+  if (!baseRef.startsWith("alpha/") && !baseRef.startsWith("release/")) {
+    return;
+  }
   createAirtableRecord.updateArgs({
     ...argv,
     pullRequestTitle: current.title,
@@ -65,7 +68,7 @@ const traversePr = async (
   headRef,
   count = 0
 ) => {
-  if (pullRequestNumber <= 0 || count > 500) {
+  if (pullRequestNumber <= 0 || count > 200) {
     return;
   }
   const pull = await getPr(argv, pullRequestNumber);
@@ -75,12 +78,13 @@ const traversePr = async (
   if ([headRef, baseRef].includes(pull?.head?.ref)) {
     return;
   }
-  traversePr(argv, pullRequestNumber - 1, baseRef, headRef, count + 1);
+  await traversePr(argv, pullRequestNumber - 1, baseRef, headRef, count + 1);
 };
 
 const getPr = async (argv, pullRequestNumber) => {
   const memo = pullCollect.get(pullRequestNumber);
   if (memo !== undefined) {
+    console.log("from cache", memo?.title, pullRequestNumber);
     return memo;
   }
   const pull = await octokit
@@ -97,9 +101,10 @@ const getPr = async (argv, pullRequestNumber) => {
     .catch(() => null);
 
   const result =
-    pull?.data?.state === "closed" && pull.data.merged_at ? pull.data : null;
+    pull?.data?.state === "closed" && pull.data.merged ? pull.data : null;
   pullCollect.size >= 1000 && pullCollect.clear();
   pullCollect.set(pullRequestNumber, result);
+  console.log("from request", result?.title, pullRequestNumber);
   return result;
 };
 

@@ -1,17 +1,23 @@
-const lib = (exports.lib = require('./lib.js'));
-const core = require('@actions/core');
-const github = require('@actions/github');
+const lib = (exports.lib = require("./lib.js"));
+const core = require("@actions/core");
+const github = require("@actions/github");
 
 const main = async function () {
   const context = github.context;
   const argv = {
-    token: core.getInput('token'),
+    token: core.getInput("token"),
     apiKey: core.getInput("apiKey"),
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
   };
+  console.log({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pullRequestTitle: context.payload.pull_request.title,
+    pullRequestNumber: context.payload.pull_request.number,
+  });
   await lib.getReleaseNote(argv, pullRequestNumber);
 };
 
