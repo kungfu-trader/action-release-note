@@ -13,12 +13,14 @@ const main = async function () {
     pullRequestNumber: context.payload.pull_request.number,
   };
   console.log({
+    token: core.getInput("token")?.length,
+    apiKey: core.getInput("apiKey")?.length,
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
   });
-  await lib.getReleaseNote(argv, pullRequestNumber);
+  await lib.getReleaseNote(argv);
 };
 
 if (require.main === module) {
