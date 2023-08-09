@@ -1,0 +1,30 @@
+{
+  "name": "@kungfu-trader/action-release-note",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": "https://github.com/kungfu-trader/action-release-note",
+  "author": "Kungfu Trader",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "yarn dist",
+    "dist": "ncc build index.js",
+    "format": "prettier --write --parser typescript \"*.js\"",
+    "lint": "eslint --ext .js ."
+  },
+  "dependencies": {
+    "@actions/core": "^1.8.0",
+    "@actions/github": "^5.0.0",
+    "@octokit/rest": "^19.0.7",
+    "@yarnpkg/lockfile": "^1.1.0",
+    "axios": "^1.4.0",
+    "glob": "^10.3.3"
+  },
+  "devDependencies": {
+    "@ls-lint/ls-lint": "^1.9.0",
+    "@typescript-eslint/parser": "^3.10.0",
+    "@vercel/ncc": "^0.34.0",
+    "eslint": "^7.14.0",
+    "prettier": "^2.3.0",
+    "prettier-eslint-cli": "^5.0.0"
+  }
+}
