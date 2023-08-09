@@ -49,6 +49,8 @@ const getPrIssues = async (argv) => {
   createAirtableRecord.updateArgs({
     ...argv,
     pullRequestTitle: current.title,
+    pullRequestNumber: current.number,
+    version: current.title.split(" v")?.[1],
     pkgName: getPkgNameMap(),
   });
   if (baseRef.startsWith("alpha/")) {
@@ -73,6 +75,10 @@ const traversePr = async (
   }
   const pull = await getPr(argv, pullRequestNumber);
   if (pull?.base?.ref === headRef) {
+    createAirtableRecord.updateArgs({
+      pullRequestTitle: pull.title,
+      pullRequestNumber: pull.number,
+    });
     await findIssues(argv, pullRequestNumber);
   }
   if ([headRef, baseRef].includes(pull?.head?.ref)) {
@@ -98,7 +104,7 @@ const getPr = async (argv, pullRequestNumber) => {
         },
       }
     )
-    .catch(() => null);
+    .catch((e) => console.error(e.message));
 
   const result =
     pull?.data?.state === "closed" && pull.data.merged ? pull.data : null;
@@ -139,7 +145,7 @@ class CreateAirtableRecord {
     this.numbers = new Set();
   }
   updateArgs(argv) {
-    this.argv = argv;
+    Object.assign(this.argv, argv);
   }
   collect(lists) {
     lists.forEach((v) => {
@@ -150,7 +156,7 @@ class CreateAirtableRecord {
             repo: this.argv.repo,
             owner: this.argv.owner,
             pullRequestTitle: this.argv.pullRequestTitle,
-            version: this.argv.pullRequestTitle.split(" v")?.[1],
+            version: this.argv.version,
             pkgName: this.argv.pkgName,
           },
         });
