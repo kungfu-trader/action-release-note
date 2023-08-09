@@ -156,6 +156,7 @@ class CreateAirtableRecord {
             repo: this.argv.repo,
             owner: this.argv.owner,
             pullRequestTitle: this.argv.pullRequestTitle,
+            pullRequestNumber: this.argv.pullRequestNumber,
             version: this.argv.version,
             pkgName: this.argv.pkgName,
           },

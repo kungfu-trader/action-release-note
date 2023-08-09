@@ -27586,11 +27586,11 @@ const printMd = (argv, rootNote, depNote) => {
       return acc;
     }, `# ${argv.repo}\n\n`);
 
-  if (!fs.existsSync(__nccwpck_require__.ab + "notes")) {
-    fs.mkdirSync(__nccwpck_require__.ab + "notes");
+  if (!fs.existsSync(path.join(process.cwd(), "notes"))) {
+    fs.mkdirSync(path.join(process.cwd(), "notes"));
   }
   fs.writeFileSync(
-    __nccwpck_require__.ab + "release.md",
+    path.join(process.cwd(), "notes/release.md"),
     str.slice(0, -1)
   );
 };
@@ -28096,6 +28096,7 @@ class CreateAirtableRecord {
             repo: this.argv.repo,
             owner: this.argv.owner,
             pullRequestTitle: this.argv.pullRequestTitle,
+            pullRequestNumber: this.argv.pullRequestNumber,
             version: this.argv.version,
             pkgName: this.argv.pkgName,
           },

@@ -8,6 +8,9 @@ inputs:
   monday_api_key:
     description: "secrets.MONDAY_API_KEY"
     required: false
+  apiKey:
+    description: "secrets.AIRTABLE_API_KEY"
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"
