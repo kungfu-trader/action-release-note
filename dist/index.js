@@ -27590,7 +27590,12 @@ const printMd = (argv, rootNote, depNote) => {
     fs.mkdirSync(path.join(process.cwd(), "notes"));
   }
   fs.writeFileSync(
-    path.join(process.cwd(), `notes/${argv.repo}-${argv.pullRequestTitle}-release-note-${Date.now()}.md`),
+    path.join(
+      process.cwd(),
+      `notes/${argv.repo}-${
+        argv.pullRequestTitle
+      }-release-note-${Date.now()}.md`
+    ),
     str.slice(0, -1)
   );
 };
