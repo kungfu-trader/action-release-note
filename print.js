@@ -16,6 +16,7 @@ exports.createNote = async function (argv) {
   const rootNote = await printRootNote(argv, currentVersion);
   const depNote = await printDepNote(argv, octokit, lastVersion);
   printMd(argv, rootNote, depNote);
+  // printRst(argv, rootNote, depNote);
 };
 
 const printMd = (argv, rootNote, depNote) => {
@@ -44,6 +45,37 @@ const printMd = (argv, rootNote, depNote) => {
       `notes/${argv.repo}-${
         argv.pullRequestTitle
       }-release-note-${Date.now()}.md`
+    ),
+    str.slice(0, -1)
+  );
+};
+
+const printRst = (argv, rootNote, depNote) => {
+  const str = [...rootNote, ...depNote]
+    .filter((v) => v.notes.length > 0)
+    .reduce((acc, cur) => {
+      acc += `- ${cur.description}\n\n`;
+      cur.notes.forEach((e, i) => {
+        const url = cur.urls?.[i];
+        if (url) {
+          acc += `  - \`${e} <${url}>\`_ \n`;
+        } else {
+          acc += `  - ${e} \n`;
+        }
+      });
+      acc += "\n";
+      return acc;
+    }, `${argv.repo}\n=========\n\n`);
+
+  if (!fs.existsSync(path.join(process.cwd(), "notes"))) {
+    fs.mkdirSync(path.join(process.cwd(), "notes"));
+  }
+  fs.writeFileSync(
+    path.join(
+      process.cwd(),
+      `notes/${argv.repo}-${
+        argv.pullRequestTitle
+      }-release-note-${Date.now()}.rst`
     ),
     str.slice(0, -1)
   );
