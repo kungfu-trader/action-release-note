@@ -5,9 +5,6 @@ inputs:
   token:
     description: "secrets.GITHUB_TOKEN"
     required: true
-  monday_api_key:
-    description: "secrets.MONDAY_API_KEY"
-    required: false
   apiKey:
     description: "secrets.AIRTABLE_API_KEY"
     required: false
