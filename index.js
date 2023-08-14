@@ -1,4 +1,4 @@
-const lib = (exports.lib = require("./lib.js"));
+const lib = (exports.lib = require("./lib"));
 const core = require("@actions/core");
 const github = require("@actions/github");
 
