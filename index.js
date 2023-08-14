@@ -21,7 +21,7 @@ const main = async function () {
     pullRequestNumber: context.payload.pull_request.number,
   });
   if (!argv.apiKey) {
-    console.error('has not airtable access token');
+    console.error("has not airtable access token");
     return;
   }
   await lib.getReleaseNote(argv);

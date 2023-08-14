@@ -101906,6 +101906,10 @@ const main = async function () {
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
   });
+  if (!argv.apiKey) {
+    console.error("has not airtable access token");
+    return;
+  }
   await lib.getReleaseNote(argv);
 };
 
