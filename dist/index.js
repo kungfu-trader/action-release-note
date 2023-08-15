@@ -255,7 +255,7 @@ const getRecordFromAirtable = async (argv, rules, offset = 0) => {
       }));
     })
     .catch((e) => {
-      console.error(e.stack);
+      console.error(e);
     });
   if (result?.length === pageSize && offset !== undefined) {
     return [...result, ...(await getRecordFromAirtable(argv, rules, offset))];
@@ -263,7 +263,7 @@ const getRecordFromAirtable = async (argv, rules, offset = 0) => {
   return result;
 };
 
-const groupByRecords = (repo, records, description = "") => {
+const groupByRecords = (repo, records = [], description = "") => {
   let result = records.reduce((acc, cur) => {
     const index = acc.findIndex((v) => v.version === cur.version);
     if (index >= 0) {
@@ -389,8 +389,12 @@ const filterByFormulaRule = ({ repo, version, pkgName }) => {
 const path = __nccwpck_require__(1017);
 const fs = __nccwpck_require__(7147);
 
-const printMarkDown = (argv, rootNote, depNote, currentVersion) => {
-  const content = [...rootNote, ...depNote]
+const printMarkDown = (argv, rootNote, depNote, version) => {
+  const notes = [...rootNote, ...depNote];
+  if (notes.length === 0) {
+    return;
+  }
+  const content = notes
     .filter((v) => v.notes.length > 0)
     .reduce((acc, cur) => {
       acc += `- ${cur.description}\n`;
@@ -409,14 +413,18 @@ const printMarkDown = (argv, rootNote, depNote, currentVersion) => {
 
   const fileName = path.join(
     process.cwd(),
-    `notes/${argv.repo}-${currentVersion}-${Date.now()}.md`
+    `notes/${argv.repo}-${version}-${Date.now()}.md`
   );
   writeFile(fileName, content);
   return { fileName, content };
 };
 
-const printRst = (argv, rootNote, depNote, currentVersion) => {
-  const content = [...rootNote, ...depNote]
+const printRst = (argv, rootNote, depNote, version) => {
+  const notes = [...rootNote, ...depNote];
+  if (notes.length === 0) {
+    return;
+  }
+  const content = notes
     .filter((v) => v.notes.length > 0)
     .reduce((acc, cur) => {
       acc += `- ${cur.description}\n\n`;
@@ -435,7 +443,7 @@ const printRst = (argv, rootNote, depNote, currentVersion) => {
 
   const fileName = path.join(
     process.cwd(),
-    `notes/${argv.repo}-${currentVersion}-${Date.now()}.rst`
+    `notes/${argv.repo}-${version}-${Date.now()}.rst`
   );
   writeFile(fileName, content);
   return { fileName, content };
@@ -562,7 +570,7 @@ const getPr = async (argv, pullRequestNumber) => {
         },
       }
     )
-    .catch((e) => console.error(e.message));
+    .catch((e) => console.error('get pr error', e.message));
 
   const result =
     pull?.data?.state === "closed" && pull.data.merged ? pull.data : null;
@@ -591,7 +599,7 @@ const findIssues = async (argv, pullRequestNumber) => {
         }
       }
     } 
-  `);
+  `).catch(e => console.error(e.message));
   const issues = iss?.repository?.pullRequest?.closingIssuesReferences?.edges;
   createAirtableRecord.collect(issues);
 };
