@@ -1,6 +1,6 @@
 {
   "name": "@kungfu-trader/action-release-note",
-  "version": "1.0.1-alpha.1",
+  "version": "1.0.1-alpha.2",
   "main": "dist/index.js",
   "repository": "https://github.com/kungfu-trader/action-release-note",
   "author": "Kungfu Trader",
@@ -17,8 +17,7 @@
     "@octokit/rest": "^19.0.7",
     "@yarnpkg/lockfile": "^1.1.0",
     "axios": "^1.4.0",
-    "glob": "^10.3.3",
-    "markdown-pdf": "^11.0.0"
+    "glob": "^10.3.3"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.9.0",
