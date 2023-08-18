@@ -18,6 +18,7 @@
     "@yarnpkg/lockfile": "^1.1.0",
     "axios": "^1.4.0",
     "glob": "^10.3.3",
+    "lodash.sortby": "^4.7.0",
     "md-to-pdf": "^5.2.4"
   },
   "devDependencies": {
