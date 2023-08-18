@@ -6,8 +6,8 @@
   "author": "Kungfu Trader",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "yarn dist",
-    "dist": "ncc build index.js",
+    "postinstall": "patch-package",
+    "build": "esbuild index.js --bundle --minify --outfile=dist/index.js --platform=node",
     "format": "prettier --write --parser typescript \"*.js\"",
     "lint": "eslint --ext .js ."
   },
@@ -17,13 +17,15 @@
     "@octokit/rest": "^19.0.7",
     "@yarnpkg/lockfile": "^1.1.0",
     "axios": "^1.4.0",
-    "glob": "^10.3.3"
+    "glob": "^10.3.3",
+    "md-to-pdf": "^5.2.4"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.9.0",
     "@typescript-eslint/parser": "^3.10.0",
-    "@vercel/ncc": "^0.34.0",
+    "esbuild": "^0.19.2",
     "eslint": "^7.14.0",
+    "patch-package": "^8.0.0",
     "prettier": "^2.3.0",
     "prettier-eslint-cli": "^5.0.0"
   }

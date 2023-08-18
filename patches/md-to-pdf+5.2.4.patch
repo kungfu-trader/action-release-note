@@ -1,0 +1,26 @@
+diff --git a/node_modules/md-to-pdf/dist/lib/config.js b/node_modules/md-to-pdf/dist/lib/config.js
+index 56e4fcb..be9f8bd 100644
+--- a/node_modules/md-to-pdf/dist/lib/config.js
++++ b/node_modules/md-to-pdf/dist/lib/config.js
+@@ -4,7 +4,7 @@ exports.defaultConfig = void 0;
+ const path_1 = require("path");
+ exports.defaultConfig = {
+     basedir: process.cwd(),
+-    stylesheet: [(0, path_1.resolve)(__dirname, '..', '..', 'markdown.css')],
++    stylesheet: [(0, path_1.resolve)(__dirname, '..', 'styles', 'markdown.css')],
+     script: [],
+     css: '',
+     document_title: '',
+diff --git a/node_modules/md-to-pdf/dist/lib/md-to-pdf.js b/node_modules/md-to-pdf/dist/lib/md-to-pdf.js
+index 89ea6f7..04789a0 100644
+--- a/node_modules/md-to-pdf/dist/lib/md-to-pdf.js
++++ b/node_modules/md-to-pdf/dist/lib/md-to-pdf.js
+@@ -54,7 +54,7 @@ const convertMdToPdf = async (input, config, { args = {}, browser, } = {}) => {
+     if (config.dest === undefined) {
+         config.dest = 'path' in input ? (0, get_output_file_path_1.getOutputFilePath)(input.path, config.as_html ? 'html' : 'pdf') : 'stdout';
+     }
+-    const highlightStylesheet = (0, path_1.resolve)((0, path_1.dirname)(require.resolve('highlight.js')), '..', 'styles', `${config.highlight_style}.css`);
++    const highlightStylesheet = (0, path_1.resolve)(__dirname, '..', 'styles', 'github.css');
+     config.stylesheet = [...new Set([...config.stylesheet, highlightStylesheet])];
+     const html = (0, get_html_1.getHtml)(md, config);
+     const relativePath = 'path' in input ? (0, path_1.relative)(config.basedir, input.path) : '.';
