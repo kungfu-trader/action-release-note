@@ -11,6 +11,18 @@ index 56e4fcb..be9f8bd 100644
      script: [],
      css: '',
      document_title: '',
+diff --git a/node_modules/md-to-pdf/dist/lib/generate-output.js b/node_modules/md-to-pdf/dist/lib/generate-output.js
+index 12fac90..bbf8585 100644
+--- a/node_modules/md-to-pdf/dist/lib/generate-output.js
++++ b/node_modules/md-to-pdf/dist/lib/generate-output.js
+@@ -63,6 +63,6 @@ async function generateOutput(html, relativePath, config, browserRef) {
+         outputFileContent = await page.pdf(config.pdf_options);
+     }
+     await page.close();
+-    return config.devtools ? undefined : { filename: config.dest, content: outputFileContent };
++    return config.devtools ? undefined : { filename: config.dest, content: outputFileContent, html };
+ }
+ exports.generateOutput = generateOutput;
 diff --git a/node_modules/md-to-pdf/dist/lib/md-to-pdf.js b/node_modules/md-to-pdf/dist/lib/md-to-pdf.js
 index 89ea6f7..04789a0 100644
 --- a/node_modules/md-to-pdf/dist/lib/md-to-pdf.js
