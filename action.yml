@@ -8,6 +8,11 @@ inputs:
   apiKey:
     description: "secrets.AIRTABLE_API_KEY"
     required: false
+  bucket-release:
+    description: "S3 Bucket used as release area of prebuilt binaries"
+    default: "kungfu-prebuilt"
+    required: false
+
 runs:
   using: "node16"
   main: "dist/index.js"

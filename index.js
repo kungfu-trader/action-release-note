@@ -7,19 +7,12 @@ const main = async function () {
   const argv = {
     token: core.getInput("token"),
     apiKey: core.getInput("apiKey"),
+    bucketRelease: core.getInput("bucket-release"),
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
   };
-  console.log({
-    token: core.getInput("token")?.length,
-    apiKey: core.getInput("apiKey")?.length,
-    owner: context.payload.repository.owner.login,
-    repo: context.payload.repository.name,
-    pullRequestTitle: context.payload.pull_request.title,
-    pullRequestNumber: context.payload.pull_request.number,
-  });
   if (!argv.apiKey) {
     console.error("has not airtable access token");
     return;
