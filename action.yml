@@ -1,0 +1,18 @@
+name: "Release Note"
+author: "Kungfu Trader"
+description: "Output Release Note When Merged"
+inputs:
+  token:
+    description: "secrets.GITHUB_TOKEN"
+    required: true
+  apiKey:
+    description: "secrets.AIRTABLE_API_KEY"
+    required: false
+  bucket-release:
+    description: "S3 Bucket used as release area of prebuilt binaries"
+    default: "kungfu-prebuilt"
+    required: false
+
+runs:
+  using: "node16"
+  main: "dist/index.js"
