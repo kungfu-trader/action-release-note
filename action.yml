@@ -13,7 +13,7 @@ inputs:
     required: false
 outputs:
   has_notes:
-    description: 'Whether the notes exists or not'
+    description: "Whether the notes exists or not."
 
 runs:
   using: "node16"

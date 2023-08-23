@@ -21,8 +21,8 @@ const main = async function () {
     await lib.teleportNotes(argv);
     return;
   }
-  const hasNotes = lib.getReleaseNote(argv);
-  core.setOutput("files_exists", hasNotes ? "true" : "false");
+  const notes = await lib.createReleaseNote(argv);
+  core.setOutput("files_exists", notes?.length > 0 ? "true" : "false");
 };
 
 if (require.main === module) {
