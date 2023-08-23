@@ -22,7 +22,7 @@ const main = async function () {
     return;
   }
   const notes = await lib.createReleaseNote(argv);
-  core.setOutput("files_exists", notes?.length > 0 ? "true" : "false");
+  core.setOutput("has_notes", notes?.length > 0 ? "true" : "false");
 };
 
 if (require.main === module) {
