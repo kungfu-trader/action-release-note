@@ -10,10 +10,6 @@ inputs:
     required: false
   bucket-release:
     description: "S3 Bucket used as release area of prebuilt binaries"
-    default: "kungfu-prebuilt"
-    required: false
-  publish:
-    description: "publish to S3 Bucke"
     required: false
 
 runs:

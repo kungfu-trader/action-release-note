@@ -17,8 +17,9 @@ const main = async function () {
     console.error("has not airtable access token");
     return;
   }
-  const publish = core.getInput("publish");
-  publish ? await lib.teleportNotes(argv) : await lib.getReleaseNote(argv);
+  argv.bucketRelease
+    ? await lib.teleportNotes(argv)
+    : await lib.getReleaseNote(argv);
 };
 
 if (require.main === module) {
