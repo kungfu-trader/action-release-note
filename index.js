@@ -17,9 +17,12 @@ const main = async function () {
     console.error("has not airtable access token");
     return;
   }
-  argv.bucketRelease
-    ? await lib.teleportNotes(argv)
-    : await lib.getReleaseNote(argv);
+  if (argv.bucketRelease) {
+    await lib.teleportNotes(argv);
+    return;
+  }
+  const hasNotes = lib.getReleaseNote(argv);
+  core.setOutput("files_exists", hasNotes ? "true" : "false");
 };
 
 if (require.main === module) {
