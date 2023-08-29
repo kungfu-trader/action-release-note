@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{artifactName}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <style>
+        html,
+        body {
+            font-size: 16px;
+        }
+
+        .container {
+            padding-bottom: 24px;
+        }
+
+        .mt-16 {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mt-16">
+                <li class="breadcrumb-item"><a href="{{{homeUrl}}}">home</a></li>
+                <li class="breadcrumb-item active">{{artifactName}}</li>
+            </ol>
+        </nav>
+        <div>
+            <h3>{{artifactName}}</h3>
+            <p>Update At {{created}}</p>
+        </div>
+
+        <div class="accordion mt-10" id="accordionPanelsStayOpenExample">
+            {{#tableItem}}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-{{key}}" aria-expanded="true"
+                        aria-controls="panelsStayOpen-{{key}}">
+                        {{key}}
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-{{key}}" class="accordion-collapse collapse show">
+                    <ul class="list-group">
+                        {{#items}}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{{url}}}">{{name}}</a>
+                            <span class="badge bg-primary rounded-pill">{{date}}</span>
+                        </li>
+                        {{/items}}
+                    </ul>
+                </div>
+            </div>
+            {{/tableItem}}
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{artifactName}} {{version}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <style>
+        html,
+        body {
+            font-size: 16px;
+        }
+        .container {
+            padding-bottom: 24px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mt-16">
+                <li class="breadcrumb-item"><a href="{{{homeUrl}}}">home</a></li>
+                <li class="breadcrumb-item"><a href="{{{artifactMenuUrl}}}">{{artifactName}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{version}}</li>
+            </ol>
+        </nav>
+        <div>
+            <h3>{{artifactName}} {{version}}</h3>
+            <p>Created At {{created}}</p>
+            {{#hasPdf}}
+            <p>You can click the button below to view the <mark>update history</mark>.</p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                View Note
+            </button>
+            {{/hasPdf}}
+        </div>
+        <table class="table table-light table-striped mt-16">
+            <thead>
+                <tr>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Download</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#tableItem}}
+                <tr>
+                    <th scope="row">
+                        {{#platform}}
+                            <span class="badge bg-secondary">{{platform}}</span>
+                        {{/platform}}
+                    </th>
+                    <td><a href="{{{url}}}" download>{{name}}</a></td>
+                    <td>{{size}}</td>
+                    <td>{{date}}</td>
+                </tr>
+                {{/tableItem}}
+            </tbody>
+        </table>
+    </div>
+    {{#hasPdf}}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 90vw; max-width: 90vw;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Release Note</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <embed src="{{{pdfUrl}}}" style="width: 100%; height: 75vh;" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/hasPdf}}
+</body>
+
+</html>
