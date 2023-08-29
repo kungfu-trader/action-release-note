@@ -11,6 +11,14 @@ inputs:
   bucket-release:
     description: "S3 Bucket used as release area of prebuilt binaries"
     required: false
+  airtable-baseid:
+    description: "airtable base for pr issues"
+    default: 'appAdi5zFFEsCzmEM'
+    required: false
+  airtable-tableid:
+    description: "airtable table for pr issues"
+    default: 'tblJabUQUuS6ywW5Z'
+    required: false
 outputs:
   has_notes:
     description: "Whether the notes exists or not."

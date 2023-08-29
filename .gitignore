@@ -5,3 +5,6 @@
 # NPM related
 node_modules/
 notes/
+artifact/
+pdfs/
+generate_html/

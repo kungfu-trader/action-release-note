@@ -8,6 +8,8 @@ const main = async function () {
     token: core.getInput("token"),
     apiKey: core.getInput("apiKey"),
     bucketRelease: core.getInput("bucket-release"),
+    baseId: core.getInput("airtable-baseid"),
+    tableId: core.getInput("airtable-tableid"),
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pullRequestTitle: context.payload.pull_request.title,
