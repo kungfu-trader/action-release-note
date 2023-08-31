@@ -1,6 +1,6 @@
 {
   "name": "@kungfu-trader/action-release-note",
-  "version": "1.0.2-alpha.11",
+  "version": "1.0.2-alpha.12",
   "main": "dist/index.js",
   "repository": "https://github.com/kungfu-trader/action-release-note",
   "author": "Kungfu Trader",
@@ -20,9 +20,7 @@
     "axios": "^1.4.0",
     "glob": "^10.3.3",
     "lodash.sortby": "^4.7.0",
-    "mustache": "^4.2.0",
-    "puppeteer": "^21.1.0",
-    "showdown": "^2.1.0"
+    "mustache": "^4.2.0"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.9.0",
