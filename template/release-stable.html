@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <title>{{artifactName}}-Releases</title>
+    <style>
+        html,
+        body {
+            background-color: var(--bs-gray-200);
+        }
+
+        .notes-header {
+            padding-top: 2.2em;
+            padding-bottom: 1.8em;
+            background-color: #fff;
+        }
+
+        .card {
+            margin-top: 1.2em;
+        }
+
+        .card-active {
+            position: relative;
+        }
+
+        .card-active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: .3rem;
+            background: var(--bs-blue);
+        }
+
+        .card-body {
+            padding: 1.1rem 1.1rem 1.1rem 1.3rem;
+        }
+
+        a {
+            color: var(--bs-body-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            transition: all .2s;
+            color: var(--bs-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="notes-header">
+        <div class="container">
+            <h2>{{artifactName}} Releases</h2>
+        </div>
+    </header>
+    <div class="container" style="padding-bottom: 2em;">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 style="margin-top: 1.5em;">Filter</h5>
+                <div class="card">
+                    <a href="./release-stable.html">
+                        <div class="card-body" id="filter-release">
+                            <h5 class="card-title">Release</h5>
+                            <p class="card-text">Regular, supported releases</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="./release-prerelease.html">
+                        <div class="card-body" id="filter-prerelease">
+                            <h5 class="card-title">Prerelease</h5>
+                            <p class="card-text">Test upcoming changes</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-9" style="padding-top: .6em;">
+                {{#tableItem}}
+                <div class="card">
+                    <a href="{{{value.url}}}">
+                        <div class="card-body">
+                            <h5 class="card-title version-card-title">{{key}}</h5>
+                            <p class="card-text">Created At {{value.date}}</p>
+                        </div>
+                    </a>
+                </div>
+                {{/tableItem}}
+            </div>
+        </div>
+    </div>
+    <script lang="js">
+        function navChange(nav) {
+            document.getElementById(nav).classList.add('card-active');
+        }
+        window.onload = function () {
+            var currentPage = 1;
+            navChange(document.title.toLocaleLowerCase().indexOf('prerelease') > -1 ? 'filter-prerelease' : 'filter-release');
+        }
+    </script>
+</body>
+
+</html>
