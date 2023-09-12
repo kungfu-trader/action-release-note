@@ -7,7 +7,8 @@ const main = async function () {
   const argv = {
     token: core.getInput("token"),
     apiKey: core.getInput("apiKey"),
-    bucketRelease: core.getInput("bucket-release"),
+    bucketRelease: core.getInput("bucket-release") ? "kungfu-releases" : null,
+    bucketPrebuilt: "kungfu-prebuilt",
     baseId: core.getInput("airtable-baseid"),
     tableId: core.getInput("airtable-tableid"),
     owner: context.payload.repository.owner.login,
@@ -15,7 +16,7 @@ const main = async function () {
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
   };
-  if (!argv.apiKey) {
+  if (!argv.apiKey && !argv.bucketRelease) {
     console.error("has not airtable access token");
     return;
   }
