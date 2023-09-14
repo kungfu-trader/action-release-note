@@ -12,6 +12,8 @@ jobs:
     uses: kungfu-trader/workflows/.github/workflows/.release-verify.yml@v1
     with:
       prebuild: false
+    secrets:
+      NODE_AUTH_TOKEN: ${{ secrets.KUNGFU_GITHUB_TOKEN }}
   
   verify:
     needs: try
