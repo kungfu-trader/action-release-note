@@ -20,6 +20,10 @@ const main = async function () {
     console.error("has not airtable access token");
     return;
   }
+  if (core.getInput("full-dose")) {
+    lib.refreshFullDose(argv);
+    return;
+  }
   if (argv.bucketRelease) {
     await lib.teleportNotes(argv);
     return;
