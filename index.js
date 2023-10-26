@@ -13,8 +13,8 @@ const main = async function () {
     tableId: core.getInput("airtable-tableid"),
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
-    pullRequestTitle: context.payload.pull_request.title,
-    pullRequestNumber: context.payload.pull_request.number,
+    pullRequestTitle: context.payload?.pull_request?.title,
+    pullRequestNumber: context.payload?.pull_request?.number,
     fullDoseRepo: core.getInput("full-dose-repo"),
     fullDoseArtifact: core.getInput("full-dose-artifact"),
   };
