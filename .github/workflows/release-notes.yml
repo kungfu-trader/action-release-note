@@ -1,4 +1,4 @@
-name: Collect Release Notes
+name: Rob All Release Notes 
 on:
   workflow_dispatch:
     inputs:
@@ -20,10 +20,6 @@ on:
         default: "cn-northwest-1"
         type: string
         required: false
-      test:
-          default: "cn-northwest-1"
-          type: string
-          required: false
 
 jobs:
   release-note:
