@@ -15,17 +15,19 @@ const main = async function () {
     repo: context.payload.repository.name,
     pullRequestTitle: context.payload.pull_request.title,
     pullRequestNumber: context.payload.pull_request.number,
+    fullDoseRepo: core.getInput("full-dose-repo"),
+    fullDoseArtifact: core.getInput("full-dose-artifact"),
   };
   if (!argv.apiKey) {
     console.error("has not airtable access token");
     return;
   }
-  if (core.getInput("full-dose")) {
-    lib.refreshFullDose(argv);
-    return;
-  }
   if (argv.bucketRelease) {
     await lib.teleportNotes(argv);
+    return;
+  }
+  if (argv.fullDoseRepo && argv.fullDoseArtifact) {
+    lib.refreshFullDose(argv);
     return;
   }
   const notes = await lib.createReleaseNote(argv);
