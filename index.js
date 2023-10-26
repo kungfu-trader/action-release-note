@@ -22,18 +22,6 @@ const main = async function () {
     console.error("has not airtable access token");
     return;
   }
-  console.log({
-    bucketRelease: core.getInput("bucket-release") ? "kungfu-releases" : null,
-    bucketPrebuilt: "kungfu-prebuilt",
-    baseId: core.getInput("airtable-baseid"),
-    tableId: core.getInput("airtable-tableid"),
-    owner: context.payload.repository.owner.login,
-    repo: context.payload.repository.name,
-    pullRequestTitle: context.payload?.pull_request?.title,
-    pullRequestNumber: context.payload?.pull_request?.number,
-    fullDoseRepo: core.getInput("full-dose-repo"),
-    fullDoseArtifact: core.getInput("full-dose-artifact"),
-  });
   if (argv.bucketRelease) {
     await lib.teleportNotes(argv);
     return;
