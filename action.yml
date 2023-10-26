@@ -22,8 +22,9 @@ inputs:
     description: "airtable table for pr issues"
     default: 'tblJabUQUuS6ywW5Z'
     required: false
-  full-dose:
-    default: false
+  full-dose-repo:
+    required: false
+  full-dose-artifact:
     required: false
 outputs:
   has_notes:
