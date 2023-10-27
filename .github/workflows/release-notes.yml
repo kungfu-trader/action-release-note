@@ -1,5 +1,7 @@
 name: Rob All Release Notes 
 on:
+  schedule:
+    - cron: '0 0 * * SAT'
   workflow_dispatch:
     inputs:
       repo:
