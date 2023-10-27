@@ -1,7 +1,5 @@
 name: Rob All Release Notes 
 on:
-  schedule:
-    - cron: '0 0 * * SAT'
   workflow_dispatch:
     inputs:
       repo:
@@ -17,11 +15,11 @@ on:
       bucket-release-ci:
         default: "kungfu-prebuilt"
         type: string
-        required: false
+        required: true
       aws-user-region:
         default: "cn-northwest-1"
         type: string
-        required: false
+        required: true
 
 jobs:
   release-note:
