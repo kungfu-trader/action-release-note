@@ -1,14 +1,13 @@
 {
   "name": "@kungfu-trader/action-release-note",
-  "version": "1.0.2-alpha.36",
+  "version": "1.0.2-alpha.37",
   "main": "dist/index.js",
   "repository": "https://github.com/kungfu-trader/action-release-note",
   "author": "Kungfu Trader",
   "license": "Apache-2.0",
   "scripts": {
     "postinstall": "patch-package",
-    "build:esbuild": "esbuild index.js --bundle --minify --outfile=dist/index.js --platform=node",
-    "build": "ncc build index.js -o dist",
+    "build": "esbuild index.js --bundle --minify --outfile=dist/index.js --platform=node",
     "format": "prettier --write --parser typescript \"*.js\"",
     "lint": "eslint --ext .js ."
   },
