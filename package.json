@@ -1,6 +1,6 @@
 {
   "name": "@kungfu-trader/action-release-note",
-  "version": "1.0.2-alpha.42",
+  "version": "1.0.2-alpha.43",
   "main": "dist/index.js",
   "repository": "https://github.com/kungfu-trader/action-release-note",
   "author": "Kungfu Trader",
