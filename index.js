@@ -18,6 +18,12 @@ const main = async function () {
     fullDoseRepo: core.getInput("full-dose-repo"),
     fullDoseArtifact: core.getInput("full-dose-artifact"),
   };
+  console.log({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pullRequestTitle: context.payload?.pull_request?.title,
+    pullRequestNumber: context.payload?.pull_request?.number,
+  });
   if (!argv.apiKey) {
     console.error("has not airtable access token");
     return;
